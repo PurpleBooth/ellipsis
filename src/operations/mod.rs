@@ -1,1 +1,3 @@
-pub(crate) mod actual;
+mod runner;
+pub use runner::run;
+pub use runner::Error as RunnerError;

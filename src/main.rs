@@ -9,7 +9,7 @@ use thiserror::Error as ThisError;
 fn main() -> Result<(), Error> {
     let matches = cli::app().get_matches();
     let config = config::Config::try_from(&matches)?;
-    operations::actual::run(config)?;
+    operations::run(config)?;
 
     println!("Done!");
 
@@ -21,5 +21,5 @@ pub enum Error {
     #[error(transparent)]
     CliArgument(#[from] config::Error),
     #[error(transparent)]
-    Actual(#[from] operations::actual::Error),
+    Actual(#[from] operations::RunnerError),
 }

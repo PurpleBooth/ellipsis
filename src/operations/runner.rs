@@ -7,7 +7,7 @@ use thiserror::Error as ThisError;
 use crate::config::Config;
 use crate::domain::Operation;
 
-pub(crate) fn run(input: Config) -> Result<(), Error> {
+pub fn run(input: Config) -> Result<(), Error> {
     for operation in input.operations {
         match operation {
             Operation::Copy { from, to } => fs::copy(from.location.clone(), to.location.clone())
@@ -54,7 +54,7 @@ mod tests {
     use crate::config::Config;
     use crate::domain;
     use crate::domain::OperationPath;
-    use crate::operations::actual::run;
+    use crate::operations::runner::run;
     use std::fs;
 
     #[test]

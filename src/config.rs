@@ -29,8 +29,8 @@ enum ConfigOperation {
     Link { to: String, from: String },
 }
 
-pub(crate) struct Config {
-    pub(crate) operations: Vec<domain::Operation>,
+pub struct Config {
+    pub operations: Vec<domain::Operation>,
 }
 
 impl TryFrom<&ArgMatches> for Config {
