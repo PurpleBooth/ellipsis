@@ -31,7 +31,7 @@ OPTIONS:
 
 See the [releases
 page](https://github.com/PurpleBooth/ellipsis/releases/latest) we build
-for windows, linux and mac (all x86\_64), alternatively use brew
+for linux and mac (all x86\_64), alternatively use brew
 
 ``` shell,skip()
 brew install PurpleBooth/repo/ellipsis
