@@ -1,10 +1,11 @@
+use std::convert::TryFrom;
+
+use thiserror::Error as ThisError;
+
 mod cli;
 mod config;
 mod domain;
 mod operations;
-
-use std::convert::TryFrom;
-use thiserror::Error as ThisError;
 
 fn main() -> Result<(), Error> {
     let matches = cli::app().get_matches();

@@ -8,16 +8,14 @@ pub fn run<T>(input: Config, driver: T) -> Result<T, Error>
 where
     T: Driver,
 {
-    let mut driver = driver;
-
-    for operation in input.operations {
-        match operation {
-            Operation::Copy { from, to } => driver = driver.copy(&from.location, &to.location)?,
-            Operation::Link { from, to } => driver = driver.link(&from.location, &to.location)?,
-        };
-    }
-
-    Ok(driver)
+    input
+        .operations
+        .into_iter()
+        .try_fold(driver, |driver, operation| match operation {
+            Operation::Copy { from, to } => driver.copy(&from.location, &to.location),
+            Operation::Link { from, to } => driver.link(&from.location, &to.location),
+        })
+        .map_err(Error::from)
 }
 
 #[derive(ThisError, Debug)]
