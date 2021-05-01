@@ -183,7 +183,7 @@ jobs:
       shell: bash
       run: |
         mkdir -p $HOME/.bin
-        curl -L "https://github.com/chaaz/versio/releases/download/v0.5.0/versio__x86_64-unknown-linux-gnu" -o $HOME/.bin/versio
+        curl -L "https://github.com/chaaz/versio/releases/download/v0.4.5/versio__x86_64-unknown-linux-gnu" -o $HOME/.bin/versio
         chmod a+x $HOME/.bin/versio
         echo "$HOME/.bin" >> $GITHUB_PATH
     - run: echo ::set-output "name=BUMP::$( versio release --dry-run )"
