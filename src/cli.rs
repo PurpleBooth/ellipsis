@@ -20,4 +20,10 @@ pub fn app() -> App<'static> {
                 .about("The configuration file for the operations to perform")
                 .env("ELLIPSIS"),
         )
+        .arg(
+            Arg::new("dry-run")
+                .long("dry-run")
+                .takes_value(false)
+                .about("Print what would be done without making any changes"),
+        )
 }

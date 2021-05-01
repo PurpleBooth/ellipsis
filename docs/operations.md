@@ -32,10 +32,6 @@ Then we run ellipsis
 ellipsis
 ```
 
-``` text,verify(script_name="copy-step-elipsis",stream=stdout)
-Done!
-```
-
 ``` shell,script(name="copy-step-see-new-file",expected_exit_code=0)
 cat "$HOME/destination.txt" 
 ```
@@ -70,10 +66,6 @@ Then we run ellipsis
 
 ``` shell,script(name="link-step-elipsis",expected_exit_code=0)
 ellipsis
-```
-
-``` text,verify(script_name="link-step-elipsis",stream=stdout)
-Done!
 ```
 
 ``` shell,script(name="link-step-see-new-file",expected_exit_code=0)

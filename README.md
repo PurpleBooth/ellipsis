@@ -14,9 +14,10 @@ Billie Thompson <billie@billiecodes.com>
 Manage dotfiles
 
 USAGE:
-    ellipsis [OPTIONS]
+    ellipsis [FLAGS] [OPTIONS]
 
 FLAGS:
+        --dry-run    Print what would be done without making any changes
     -h, --help       Prints help information
     -V, --version    Prints version information
 

@@ -14,11 +14,10 @@ function safe_specdown() {
 			REPOSITORY_DIR="$PWD"
 			TEMPORARY_DIR="$(mktemp -d)"
 			cd "$TEMPORARY_DIR"
-			mkdir "$TEMPORARY_DIR/repo"
+			mkdir "$TEMPORARY_DIR/demo"
 
-			cd "$TEMPORARY_DIR/repo"
+			cd "$TEMPORARY_DIR/demo"
 			export PATH="$REPOSITORY_DIR/target/release/:$PATH"
-			export EDSM_GZ_PATH
 			specdown run "$MARKDOWN_PATH"
 		)
 	else

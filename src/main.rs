@@ -9,9 +9,20 @@ use thiserror::Error as ThisError;
 fn main() -> Result<(), Error> {
     let matches = cli::app().get_matches();
     let config = config::Config::try_from(&matches)?;
-    operations::run(config)?;
 
-    println!("Done!");
+    match config.driver {
+        operations::DriverTypes::Io => {
+            operations::run(config, operations::IoDriver::new())?;
+        }
+
+        operations::DriverTypes::Blackhole => {
+            let driver = operations::run(config, operations::BlackholeDriver::new())?;
+
+            for (operation, message) in driver.log {
+                println!("{}: {}", operation, message)
+            }
+        }
+    }
 
     Ok(())
 }

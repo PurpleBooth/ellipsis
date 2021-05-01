@@ -2,13 +2,14 @@ use std::convert::TryFrom;
 use std::env;
 use std::fs::File;
 use std::io::Read;
+use std::path::Path;
 
 use clap::ArgMatches;
 use serde::{Deserialize, Serialize};
 use thiserror::Error as ThisError;
 
 use crate::domain;
-use std::path::Path;
+use crate::operations::DriverTypes;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct ConfigOuter {
@@ -30,6 +31,7 @@ enum ConfigOperation {
 }
 
 pub struct Config {
+    pub driver: DriverTypes,
     pub operations: Vec<domain::Operation>,
 }
 
@@ -41,11 +43,17 @@ impl TryFrom<&ArgMatches> for Config {
         let mut config = String::new();
         config_location.read_to_string(&mut config)?;
         let home = matches.value_of("home").unwrap();
+        let dry_run = matches.is_present("dry-run");
 
         let deserialized_point: ConfigOuter = serde_yaml::from_str(&config)?;
         let current_dir = env::current_dir()?;
 
         Ok(Config {
+            driver: if dry_run {
+                DriverTypes::Blackhole
+            } else {
+                DriverTypes::Io
+            },
             operations: deserialized_point
                 .todo
                 .into_iter()
@@ -120,12 +128,12 @@ mod tests {
                 from: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
                     &home.path().to_path_buf(),
-                    "source.txt"
+                    "source.txt",
                 ),
                 to: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
                     &home.path().to_path_buf(),
-                    "~/destination.txt"
+                    "~/destination.txt",
                 ),
             }]
         )
@@ -160,12 +168,12 @@ mod tests {
                 from: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
                     &home.path().to_path_buf(),
-                    "source.txt"
+                    "source.txt",
                 ),
                 to: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
                     &home.path().to_path_buf(),
-                    "~/destination.txt"
+                    "~/destination.txt",
                 ),
             }]
         )
