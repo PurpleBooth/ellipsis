@@ -190,10 +190,7 @@ jobs:
       if: ${{ contains(steps.get_versio_plan.outputs.BUMP, ' -> ') }}
       run: |
         versio release
-        cargo login "$CARGO_TOKEN"
-        cargo publish
       env:
-        CARGO_TOKEN: ${{ secrets.CARGO_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
         GITHUB_USER: ${{ github.actor }}
         RUST_LOG: versio=trace
