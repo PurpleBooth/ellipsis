@@ -46,7 +46,7 @@ Link operations can be used to create soft links files between the
 location you desire.
 
 Here we link a file from one location to another. To do this we first
-need a file to copy
+need a file to link
 
 ``` shell,script(name="link-step-create-hello-world",expected_exit_code=0)
 echo "Hello, world!" > source.txt
