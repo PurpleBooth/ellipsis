@@ -1,21 +1,25 @@
 mod cli;
+mod config;
+mod domain;
+mod operations;
 
+use std::convert::TryFrom;
 use thiserror::Error as ThisError;
 
 fn main() -> Result<(), Error> {
     let matches = cli::app().get_matches();
-    matches.value_of("home").ok_or(Error::HomeMissing)?;
-    matches.value_of("config").ok_or(Error::ConfigMissing)?;
+    let config = config::Config::try_from(&matches)?;
+    operations::actual::run(config)?;
 
-    println!("Hello, world!");
+    println!("Done!");
 
     Ok(())
 }
 
 #[derive(ThisError, Debug)]
 pub enum Error {
-    #[error("unable to get home directory from arguments")]
-    HomeMissing,
-    #[error("unable to get config file from arguments")]
-    ConfigMissing,
+    #[error(transparent)]
+    CliArgument(#[from] config::Error),
+    #[error(transparent)]
+    Actual(#[from] operations::actual::Error),
 }
