@@ -9,9 +9,13 @@ use crate::domain::Operation;
 pub(crate) fn run(input: Config) -> Result<(), Error> {
     for operation in input.operations {
         match operation {
-            Operation::Copy { from, to } => fs::copy(from.canonicalize(), to.canonicalize())
+            Operation::Copy { from, to } => fs::copy(from.location.clone(), to.location.clone())
                 .map_err(|error| {
-                    Error::Copy(from.canonicalize(), to.canonicalize(), error.to_string())
+                    Error::Copy(
+                        from.location.clone(),
+                        to.location.clone(),
+                        error.to_string(),
+                    )
                 })
                 .map(|_| ())?,
         }

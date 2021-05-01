@@ -10,7 +10,7 @@ pub enum Operation {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OperationPath {
-    location: PathBuf,
+    pub location: PathBuf,
 }
 
 impl OperationPath {
@@ -21,10 +21,6 @@ impl OperationPath {
                 None => canonical_path(&working_dir, &Path::new(&location)),
             },
         }
-    }
-
-    pub(crate) fn canonicalize(&self) -> PathBuf {
-        self.location.clone()
     }
 }
 
@@ -51,7 +47,7 @@ mod tests {
                 Path::new("/something/else"),
                 "example.txt",
             )
-            .canonicalize()
+            .location
         )
     }
 
@@ -64,7 +60,7 @@ mod tests {
                 Path::new("/something/else"),
                 "/tmp/example.txt",
             )
-            .canonicalize()
+            .location
         )
     }
 
@@ -77,7 +73,7 @@ mod tests {
                 Path::new("/something/else"),
                 "/tmp/example.txt",
             )
-            .canonicalize()
+            .location
         )
     }
 }
