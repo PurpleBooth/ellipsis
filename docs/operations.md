@@ -40,6 +40,23 @@ cat "$HOME/destination.txt"
 Hello, world!
 ```
 
+If we subsequently make changes to this file, and rerun ellipsis
+
+``` shell,script(name="copy-step-change-to-destination",expected_exit_code=0)
+echo "Some New Content" > "$HOME/destination.txt" 
+ellipsis
+```
+
+Those changes will be lost
+
+``` shell,script(name="copy-step-see-new-file",expected_exit_code=0)
+cat "$HOME/destination.txt" 
+```
+
+``` text,verify(script_name="copy-step-see-new-file",stream=stdout)
+Hello, world!
+```
+
 ## Link
 
 Link operations can be used to create soft links files between the
@@ -85,3 +102,16 @@ fi
 ``` text,verify(script_name="link-step-see-link",stream=stdout)
 It's a link!
 ```
+
+If the link is a file already
+
+``` shell,script(name="link-step-real-file",expected_exit_code=0)
+rm "$HOME/symlink.txt"
+echo "I am a real file" > "$HOME/symlink.txt"
+```
+
+``` shell,script(name="link-step-real-file-error",expected_exit_code=1)
+ellipsis
+```
+
+then we error

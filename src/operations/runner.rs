@@ -20,9 +20,9 @@ where
 
 #[derive(ThisError, Debug)]
 pub enum Error {
-    #[error(transparent)]
+    #[error("io error")]
     Io(#[from] std::io::Error),
-    #[error(transparent)]
+    #[error("driver error")]
     Driver(#[from] driver::Error),
 }
 

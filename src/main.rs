@@ -6,8 +6,9 @@ mod cli;
 mod config;
 mod domain;
 mod operations;
+use anyhow::Result as AnyhowResult;
 
-fn main() -> Result<(), Error> {
+fn main() -> AnyhowResult<()> {
     let matches = cli::app().get_matches();
     let config = config::Config::try_from(&matches)?;
 
@@ -30,8 +31,8 @@ fn main() -> Result<(), Error> {
 
 #[derive(ThisError, Debug)]
 pub enum Error {
-    #[error(transparent)]
+    #[error("cli argument error")]
     CliArgument(#[from] config::Error),
-    #[error(transparent)]
-    Actual(#[from] operations::RunnerError),
+    #[error("operation runner error")]
+    Runner(#[from] operations::RunnerError),
 }

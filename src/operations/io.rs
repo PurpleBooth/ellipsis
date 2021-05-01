@@ -16,17 +16,13 @@ impl Driver {
 impl driver::Driver for Driver {
     fn copy(self, from: &Path, to: &Path) -> Result<Driver, driver::Error> {
         fs::copy(from, to)
-            .map_err(|error| {
-                driver::Error::Copy(PathBuf::from(from), PathBuf::from(to), error.to_string())
-            })
+            .map_err(|error| driver::Error::Copy(PathBuf::from(from), PathBuf::from(to), error))
             .map(|_| Driver::new())
     }
 
     fn link(self, from: &Path, to: &Path) -> Result<Driver, driver::Error> {
         unixfs::symlink(from, to)
-            .map_err(|error| {
-                driver::Error::Link(PathBuf::from(from), PathBuf::from(to), error.to_string())
-            })
+            .map_err(|error| driver::Error::Link(PathBuf::from(from), PathBuf::from(to), error))
             .map(|_| Driver::new())
     }
 }

@@ -1,6 +1,7 @@
 # Dry Run
 
-You can see what would happen with your current config by passing the dry run flag
+You can see what would happen with your current config by passing the
+dry run flag
 
 Next we need to create the `ellipsis.yml` settings
 

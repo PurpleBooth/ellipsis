@@ -74,9 +74,9 @@ impl TryFrom<&ArgMatches> for Config {
 
 #[derive(ThisError, Debug)]
 pub enum Error {
-    #[error(transparent)]
+    #[error("yaml parse error")]
     YamlParse(#[from] serde_yaml::Error),
-    #[error(transparent)]
+    #[error("io error")]
     Io(#[from] std::io::Error),
 }
 
