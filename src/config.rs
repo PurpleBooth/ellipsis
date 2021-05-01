@@ -1,4 +1,5 @@
 use std::convert::TryFrom;
+use std::env;
 use std::fs::File;
 use std::io::Read;
 
@@ -7,7 +8,7 @@ use serde::{Deserialize, Serialize};
 use thiserror::Error as ThisError;
 
 use crate::domain;
-use std::env;
+use std::path::Path;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct ConfigOuter {
@@ -48,10 +49,8 @@ impl TryFrom<&ArgMatches> for Config {
                 .into_iter()
                 .map(|operation| match operation {
                     ConfigOperation::Copy { to, from } => domain::Operation::Copy {
-                        from,
-                        to,
-                        home: home.into(),
-                        working_dir: current_dir.clone(),
+                        from: domain::OperationPath::new(&current_dir, Path::new(home), &from),
+                        to: domain::OperationPath::new(&current_dir, Path::new(home), &to),
                     },
                 })
                 .collect(),
@@ -70,6 +69,7 @@ pub enum Error {
 #[cfg(test)]
 mod tests {
     use std::convert::TryFrom;
+    use std::env;
     use std::io::Write;
 
     use indoc::indoc;
@@ -78,7 +78,6 @@ mod tests {
     use crate::domain;
 
     use super::Config;
-    use std::env;
 
     #[test]
     fn no_config_defined() {
@@ -112,10 +111,16 @@ mod tests {
         assert_eq!(
             Config::try_from(&args).unwrap().operations,
             vec![domain::Operation::Copy {
-                from: "source.txt".into(),
-                to: "~/destination.txt".into(),
-                home: home.into_path(),
-                working_dir: env::current_dir().unwrap()
+                from: domain::OperationPath::new(
+                    &env::current_dir().unwrap(),
+                    &home.path().to_path_buf(),
+                    "source.txt"
+                ),
+                to: domain::OperationPath::new(
+                    &env::current_dir().unwrap(),
+                    &home.path().to_path_buf(),
+                    "~/destination.txt"
+                ),
             }]
         )
     }
