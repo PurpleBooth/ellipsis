@@ -25,6 +25,8 @@ struct CopyOptions {
 enum ConfigOperation {
     #[serde(rename = "copy")]
     Copy { to: String, from: String },
+    #[serde(rename = "link")]
+    Link { to: String, from: String },
 }
 
 pub(crate) struct Config {
@@ -49,6 +51,10 @@ impl TryFrom<&ArgMatches> for Config {
                 .into_iter()
                 .map(|operation| match operation {
                     ConfigOperation::Copy { to, from } => domain::Operation::Copy {
+                        from: domain::OperationPath::new(&current_dir, Path::new(home), &from),
+                        to: domain::OperationPath::new(&current_dir, Path::new(home), &to),
+                    },
+                    ConfigOperation::Link { to, from } => domain::Operation::Link {
                         from: domain::OperationPath::new(&current_dir, Path::new(home), &from),
                         to: domain::OperationPath::new(&current_dir, Path::new(home), &to),
                     },
@@ -111,6 +117,46 @@ mod tests {
         assert_eq!(
             Config::try_from(&args).unwrap().operations,
             vec![domain::Operation::Copy {
+                from: domain::OperationPath::new(
+                    &env::current_dir().unwrap(),
+                    &home.path().to_path_buf(),
+                    "source.txt"
+                ),
+                to: domain::OperationPath::new(
+                    &env::current_dir().unwrap(),
+                    &home.path().to_path_buf(),
+                    "~/destination.txt"
+                ),
+            }]
+        )
+    }
+
+    #[test]
+    fn link_operation() {
+        let home = tempfile::tempdir().unwrap();
+        let mut tmpfile = tempfile::NamedTempFile::new().unwrap();
+        write!(
+            tmpfile,
+            indoc! {r#"
+            ---
+            todo:
+            - link:
+                from: source.txt
+                to: ~/destination.txt
+        "#}
+        )
+        .unwrap();
+
+        let args = app().get_matches_from(vec![
+            "ellipsis",
+            "--home",
+            &home.path().display().to_string(),
+            "--config",
+            &tmpfile.path().display().to_string(),
+        ]);
+        assert_eq!(
+            Config::try_from(&args).unwrap().operations,
+            vec![domain::Operation::Link {
                 from: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
                     &home.path().to_path_buf(),

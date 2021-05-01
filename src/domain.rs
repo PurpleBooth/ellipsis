@@ -6,6 +6,10 @@ pub enum Operation {
         from: OperationPath,
         to: OperationPath,
     },
+    Link {
+        from: OperationPath,
+        to: OperationPath,
+    },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
