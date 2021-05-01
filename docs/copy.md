@@ -5,7 +5,8 @@ location. The source and destination are relative to current working
 directory, and you may use "\~" as a shorthand for the location of your
 home directory.
 
-Here we copy a file from one location to another. To do this we first need a file to copy
+Here we copy a file from one location to another. To do this we first
+need a file to copy
 
 ``` shell,script(name="copy-step-create-hello-world",expected_exit_code=0)
 echo "Hello, world!" > source.txt
@@ -30,7 +31,6 @@ ellipsis
 ``` text,verify(script_name="copy-step-elipsis",stream=stdout)
 Done!
 ```
-
 
 ``` shell,script(name="copy-step-see-new-file",expected_exit_code=0)
 cat "$HOME/destination.txt" 
