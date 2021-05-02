@@ -3,6 +3,7 @@ use std::os::unix::fs as unixfs;
 use std::path::{Path, PathBuf};
 
 use crate::domain;
+use crate::domain::Error;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Driver {}
@@ -20,9 +21,19 @@ impl domain::Driver for Driver {
             .map(|_| Driver::new())
     }
 
-    fn link(self, from: &Path, to: &Path) -> Result<Driver, domain::Error> {
+    fn link(self, from: &Path, to: &Path, overwrite: bool) -> Result<Driver, domain::Error> {
+        if overwrite {
+            Driver::delete_real_file_if_exists(to).map_err(Driver::map_to_domain_error(
+                from.to_path_buf(),
+                to.to_path_buf(),
+            ))?;
+        }
+
         unixfs::symlink(from, to)
-            .map_err(|error| domain::Error::Link(PathBuf::from(from), PathBuf::from(to), error))
+            .map_err(Driver::map_to_domain_error(
+                from.to_path_buf(),
+                to.to_path_buf(),
+            ))
             .map(|_| Driver::new())
     }
 }
@@ -32,6 +43,7 @@ mod tests {
     use std::fs;
     use std::fs::File;
     use std::io::{Read, Write};
+    use std::path::Path;
 
     use super::Driver as IoDriver;
     use crate::domain::Driver;
@@ -39,37 +51,54 @@ mod tests {
     #[test]
     fn copy_file() {
         let working_dir = tempfile::tempdir().unwrap().into_path();
-        let mut file = File::create(&working_dir.join("in.txt")).unwrap();
-        write!(file, "Hello, World!").unwrap();
+        write_file(&working_dir.join("in.txt"), "Hello, World!");
 
         IoDriver::new()
             .copy(&working_dir.join("in.txt"), &working_dir.join("out.txt"))
             .unwrap();
-
-        let mut output_file_contents = String::new();
-        File::open(working_dir.join("out.txt"))
-            .unwrap()
-            .read_to_string(&mut output_file_contents)
-            .unwrap();
-
+        let output_file_contents = read_file(&working_dir.join("out.txt"));
         assert_eq!(String::from("Hello, World!"), output_file_contents)
     }
 
     #[test]
     fn link_file() {
         let working_dir = tempfile::tempdir().unwrap().into_path();
-        let mut file = File::create(&working_dir.join("in.txt")).unwrap();
-        write!(file, "Hello, World!").unwrap();
+        write_file(&working_dir.join("in.txt"), "Hello, World!");
 
         IoDriver::new()
-            .link(&working_dir.join("in.txt"), &working_dir.join("out.txt"))
+            .link(
+                &working_dir.join("in.txt"),
+                &working_dir.join("out.txt"),
+                false,
+            )
             .unwrap();
 
-        let mut output_file_contents = String::new();
-        File::open(working_dir.join("out.txt"))
-            .unwrap()
-            .read_to_string(&mut output_file_contents)
+        let output_file_contents = read_file(&working_dir.join("out.txt"));
+        assert_eq!(String::from("Hello, World!"), output_file_contents);
+        assert_eq!(
+            true,
+            fs::symlink_metadata(working_dir.join("out.txt"))
+                .unwrap()
+                .file_type()
+                .is_symlink()
+        )
+    }
+
+    #[test]
+    fn link_file_and_overwrite() {
+        let working_dir = tempfile::tempdir().unwrap().into_path();
+        write_file(&working_dir.join("in.txt"), "Hello, World!");
+        write_file(&working_dir.join("out.txt"), "I exist");
+
+        IoDriver::new()
+            .link(
+                &working_dir.join("in.txt"),
+                &working_dir.join("out.txt"),
+                true,
+            )
             .unwrap();
+
+        let output_file_contents = read_file(&working_dir.join("out.txt"));
 
         assert_eq!(String::from("Hello, World!"), output_file_contents);
         assert_eq!(
@@ -79,5 +108,57 @@ mod tests {
                 .file_type()
                 .is_symlink()
         )
+    }
+
+    #[test]
+    fn link_file_and_do_not_overwrite() {
+        let working_dir = tempfile::tempdir().unwrap().into_path();
+        write_file(&working_dir.join("in.txt"), "Hello, World!");
+        write_file(&working_dir.join("out.txt"), "I exist");
+
+        assert_eq!(
+            true,
+            IoDriver::new()
+                .link(
+                    &working_dir.join("in.txt"),
+                    &working_dir.join("out.txt"),
+                    false,
+                )
+                .is_err()
+        );
+    }
+
+    fn read_file(working_dir: &Path) -> String {
+        let mut output_file_contents = String::new();
+        File::open(working_dir)
+            .unwrap()
+            .read_to_string(&mut output_file_contents)
+            .unwrap();
+        output_file_contents
+    }
+
+    fn write_file(working_dir: &Path, text: &str) {
+        let mut file = File::create(&working_dir).unwrap();
+        write!(file, "{}", text).unwrap();
+    }
+}
+
+impl Driver {
+    fn map_to_domain_error(from: PathBuf, to: PathBuf) -> impl FnOnce(std::io::Error) -> Error {
+        |error| domain::Error::Link(from, to, error)
+    }
+}
+
+impl Driver {
+    fn delete_real_file_if_exists(path: &Path) -> Result<(), std::io::Error> {
+        if !path.exists() {
+            return Ok(());
+        }
+
+        if fs::metadata(path)?.file_type().is_file() {
+            fs::remove_file(path).map(|_| ())
+        } else {
+            Ok(())
+        }
     }
 }

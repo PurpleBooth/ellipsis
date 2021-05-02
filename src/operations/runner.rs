@@ -13,7 +13,11 @@ where
         .into_iter()
         .try_fold(driver, |driver, operation| match operation {
             Operation::Copy { from, to } => driver.copy(&from.location, &to.location),
-            Operation::Link { from, to } => driver.link(&from.location, &to.location),
+            Operation::Link {
+                from,
+                to,
+                overwrite,
+            } => driver.link(&from.location, &to.location, overwrite),
         })
         .map_err(Error::from)
 }
@@ -85,6 +89,7 @@ mod tests {
                     &tempfile::tempdir().unwrap().into_path(),
                     "in.txt",
                 ),
+                overwrite: false,
             }],
         };
 
@@ -94,7 +99,7 @@ mod tests {
             vec![(
                 String::from("link"),
                 format!(
-                    "{:?} -> {:?}",
+                    "{:?} -> (overwriting: false) {:?}",
                     working_dir.join("in.txt"),
                     working_dir.join("out.txt")
                 )

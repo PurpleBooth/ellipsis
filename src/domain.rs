@@ -13,6 +13,7 @@ pub enum Operation {
     Link {
         from: OperationPath,
         to: OperationPath,
+        overwrite: bool,
     },
 }
 
@@ -47,7 +48,7 @@ pub enum DriverTypes {
 
 pub trait Driver<NewSelf = Self> {
     fn copy(self, from: &Path, to: &Path) -> Result<NewSelf, Error>;
-    fn link(self, from: &Path, to: &Path) -> Result<NewSelf, Error>;
+    fn link(self, from: &Path, to: &Path, overwrite: bool) -> Result<NewSelf, Error>;
 }
 
 #[derive(ThisError, Debug)]

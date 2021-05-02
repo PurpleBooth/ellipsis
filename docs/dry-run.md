@@ -24,7 +24,7 @@ HOME="/home/your-home" ellipsis --dry-run | sed "s#: .*/demo#: \"/demo#g"
 
 ``` text,verify(script_name="copy-step-elipsis",stream=stdout)
 copy: "/demo/source.txt" -> "/home/your-home/destination.txt"
-link: "/demo/source.txt" -> "/home/your-home/link.txt"
+link: "/demo/source.txt" -> (overwriting: false) "/home/your-home/link.txt"
 ```
 
 And no actual changes will be made

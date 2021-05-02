@@ -27,7 +27,12 @@ enum ConfigOperation {
     #[serde(rename = "copy")]
     Copy { to: String, from: String },
     #[serde(rename = "link")]
-    Link { to: String, from: String },
+    Link {
+        to: String,
+        from: String,
+        #[serde(default)]
+        overwrite: bool,
+    },
 }
 
 pub struct Config {
@@ -62,9 +67,14 @@ impl TryFrom<&ArgMatches> for Config {
                         from: domain::OperationPath::new(&current_dir, Path::new(home), &from),
                         to: domain::OperationPath::new(&current_dir, Path::new(home), &to),
                     },
-                    ConfigOperation::Link { to, from } => domain::Operation::Link {
+                    ConfigOperation::Link {
+                        to,
+                        from,
+                        overwrite,
+                    } => domain::Operation::Link {
                         from: domain::OperationPath::new(&current_dir, Path::new(home), &from),
                         to: domain::OperationPath::new(&current_dir, Path::new(home), &to),
+                        overwrite,
                     },
                 })
                 .collect(),
@@ -150,6 +160,36 @@ mod tests {
                     &home.path().to_path_buf(),
                     "~/destination.txt",
                 ),
+                overwrite: false,
+            }],
+            &home,
+        )
+    }
+    #[test]
+    fn link_and_overwrite() {
+        let home = tempfile::tempdir().unwrap();
+
+        assert_yaml_parsing(
+            indoc! {r#"
+            ---
+            todo:
+            - link:
+                from: source.txt
+                to: ~/destination.txt
+                overwrite: true
+        "#},
+            &[domain::Operation::Link {
+                from: domain::OperationPath::new(
+                    &env::current_dir().unwrap(),
+                    &home.path().to_path_buf(),
+                    "source.txt",
+                ),
+                to: domain::OperationPath::new(
+                    &env::current_dir().unwrap(),
+                    &home.path().to_path_buf(),
+                    "~/destination.txt",
+                ),
+                overwrite: true,
             }],
             &home,
         )

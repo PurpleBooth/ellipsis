@@ -1,6 +1,7 @@
 use std::path::Path;
 
 use crate::domain;
+use crate::domain::Error;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Driver {
@@ -24,8 +25,11 @@ impl domain::Driver for Driver {
         Ok(self)
     }
 
-    fn link(mut self, from: &Path, to: &Path) -> Result<Driver, domain::Error> {
-        self.log("link".into(), format!("{:?} -> {:?}", from, to));
+    fn link(mut self, from: &Path, to: &Path, overwrite: bool) -> Result<Driver, Error> {
+        self.log(
+            "link".into(),
+            format!("{:?} -> (overwriting: {}) {:?}", from, overwrite, to),
+        );
         Ok(self)
     }
 }
@@ -59,14 +63,18 @@ mod tests {
     fn link_file() {
         let working_dir = tempfile::tempdir().unwrap().into_path();
         let driver = BlackholeDriver::new()
-            .link(&working_dir.join("in.txt"), &working_dir.join("out.txt"))
+            .link(
+                &working_dir.join("in.txt"),
+                &working_dir.join("out.txt"),
+                false,
+            )
             .unwrap();
 
         assert_eq!(
             vec![(
                 String::from("link"),
                 format!(
-                    "{:?} -> {:?}",
+                    "{:?} -> (overwriting: false) {:?}",
                     working_dir.join("in.txt"),
                     working_dir.join("out.txt")
                 )

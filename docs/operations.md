@@ -114,4 +114,37 @@ echo "I am a real file" > "$HOME/symlink.txt"
 ellipsis
 ```
 
-then we error
+then we get an error, unless we set the overwrite flag
+
+``` yaml,file(path="ellipsis.yml")
+---
+todo:
+- link:
+    from: source.txt
+    to: ~/symlink.txt
+    overwrite: true
+```
+
+Then we can run leipsis
+
+``` shell,script(name="link-step-overwrite",expected_exit_code=0)
+ellipsis
+```
+
+``` shell,script(name="link-step-check-file-after-overwrite",expected_exit_code=0)
+cat "$HOME/symlink.txt" 
+```
+
+``` text,verify(script_name="link-step-check-file-after-overwrite",stream=stdout)
+Hello, world!
+```
+
+``` shell,script(name="link-step-see-link-after-overwrite",expected_exit_code=0)
+if [[ -L "$HOME/symlink.txt" ]]; then
+  echo "It's a link!"
+fi
+```
+
+``` text,verify(script_name="link-step-see-link-after-overwrite",stream=stdout)
+It's a link!
+```
