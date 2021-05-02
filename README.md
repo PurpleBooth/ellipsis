@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="ellipsis" src="./logo/logo.svg">
+    <img alt="ellipsis" src="./logo/logo.png">
 </p>
 
 *ellipsis* is a dotfile manager.
