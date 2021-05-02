@@ -75,13 +75,10 @@ mod tests {
 
         let output_file_contents = read_file(&working_dir.join("out.txt"));
         assert_eq!(String::from("Hello, World!"), output_file_contents);
-        assert_eq!(
-            true,
-            fs::symlink_metadata(working_dir.join("out.txt"))
-                .unwrap()
-                .file_type()
-                .is_symlink()
-        )
+        assert!(fs::symlink_metadata(working_dir.join("out.txt"))
+            .unwrap()
+            .file_type()
+            .is_symlink())
     }
 
     #[test]
@@ -101,13 +98,10 @@ mod tests {
         let output_file_contents = read_file(&working_dir.join("out.txt"));
 
         assert_eq!(String::from("Hello, World!"), output_file_contents);
-        assert_eq!(
-            true,
-            fs::symlink_metadata(working_dir.join("out.txt"))
-                .unwrap()
-                .file_type()
-                .is_symlink()
-        )
+        assert!(fs::symlink_metadata(working_dir.join("out.txt"))
+            .unwrap()
+            .file_type()
+            .is_symlink())
     }
 
     #[test]
@@ -116,16 +110,13 @@ mod tests {
         write_file(&working_dir.join("in.txt"), "Hello, World!");
         write_file(&working_dir.join("out.txt"), "I exist");
 
-        assert_eq!(
-            true,
-            IoDriver::new()
-                .link(
-                    &working_dir.join("in.txt"),
-                    &working_dir.join("out.txt"),
-                    false,
-                )
-                .is_err()
-        );
+        assert!(IoDriver::new()
+            .link(
+                &working_dir.join("in.txt"),
+                &working_dir.join("out.txt"),
+                false,
+            )
+            .is_err());
     }
 
     fn read_file(working_dir: &Path) -> String {

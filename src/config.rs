@@ -107,7 +107,7 @@ mod tests {
     #[test]
     fn no_config_defined() {
         let args = app().get_matches_from(vec!["ellipsis"]);
-        assert_eq!(Config::try_from(&args).is_err(), true)
+        assert!(Config::try_from(&args).is_err())
     }
 
     #[test]
