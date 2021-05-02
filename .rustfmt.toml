@@ -2,4 +2,4 @@ reorder_impl_items = true
 reorder_imports = true
 reorder_modules = true
 group_imports = "StdExternalCrate"
-imports_granularity = "Crate"
+imports_granularity = "Module"

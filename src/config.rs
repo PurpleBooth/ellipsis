@@ -1,10 +1,15 @@
-use std::{convert::TryFrom, env, fs::File, io::Read, path::Path};
+use std::convert::TryFrom;
+use std::env;
+use std::fs::File;
+use std::io::Read;
+use std::path::Path;
 
 use clap::ArgMatches;
 use serde::{Deserialize, Serialize};
 use thiserror::Error as ThisError;
 
-use crate::{domain, domain::DriverTypes};
+use crate::domain;
+use crate::domain::DriverTypes;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct ConfigOuter {
@@ -77,13 +82,17 @@ pub enum Error {
 
 #[cfg(test)]
 mod tests {
-    use std::{convert::TryFrom, env, io::Write};
+    use std::convert::TryFrom;
+    use std::env;
+    use std::io::Write;
 
     use indoc::indoc;
     use tempfile::TempDir;
 
     use super::Config;
-    use crate::{cli::app, domain, domain::Operation};
+    use crate::cli::app;
+    use crate::domain;
+    use crate::domain::Operation;
 
     #[test]
     fn no_config_defined() {
@@ -94,29 +103,15 @@ mod tests {
     #[test]
     fn copy_operation() {
         let home = tempfile::tempdir().unwrap();
-        let mut tmpfile = tempfile::NamedTempFile::new().unwrap();
-        write!(
-            tmpfile,
+        assert_yaml_parsing(
             indoc! {r#"
             ---
             todo:
             - copy:
                 from: source.txt
                 to: ~/destination.txt
-        "#}
-        )
-        .unwrap();
-
-        let args = app().get_matches_from(vec![
-            "ellipsis",
-            "--home",
-            &home.path().display().to_string(),
-            "--config",
-            &tmpfile.path().display().to_string(),
-        ]);
-        assert_eq!(
-            Config::try_from(&args).unwrap().operations,
-            vec![domain::Operation::Copy {
+        "#},
+            &[domain::Operation::Copy {
                 from: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
                     &home.path().to_path_buf(),
@@ -127,36 +122,24 @@ mod tests {
                     &home.path().to_path_buf(),
                     "~/destination.txt",
                 ),
-            }]
+            }],
+            &home,
         )
     }
 
     #[test]
     fn link_operation() {
         let home = tempfile::tempdir().unwrap();
-        let mut tmpfile = tempfile::NamedTempFile::new().unwrap();
-        write!(
-            tmpfile,
+
+        assert_yaml_parsing(
             indoc! {r#"
             ---
             todo:
             - link:
                 from: source.txt
                 to: ~/destination.txt
-        "#}
-        )
-        .unwrap();
-
-        let args = app().get_matches_from(vec![
-            "ellipsis",
-            "--home",
-            &home.path().display().to_string(),
-            "--config",
-            &tmpfile.path().display().to_string(),
-        ]);
-        assert_eq!(
-            Config::try_from(&args).unwrap().operations,
-            vec![domain::Operation::Link {
+        "#},
+            &[domain::Operation::Link {
                 from: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
                     &home.path().to_path_buf(),
@@ -167,7 +150,22 @@ mod tests {
                     &home.path().to_path_buf(),
                     "~/destination.txt",
                 ),
-            }]
+            }],
+            &home,
         )
+    }
+
+    fn assert_yaml_parsing(yaml: &str, expected: &[Operation], home: &TempDir) {
+        let mut tmpfile = tempfile::NamedTempFile::new().unwrap();
+        write!(tmpfile, "{}", yaml).unwrap();
+
+        let args = app().get_matches_from(vec![
+            "ellipsis",
+            "--home",
+            &home.path().display().to_string(),
+            "--config",
+            &tmpfile.path().display().to_string(),
+        ]);
+        assert_eq!(Config::try_from(&args).unwrap().operations, expected)
     }
 }

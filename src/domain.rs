@@ -1,8 +1,6 @@
 use core::result::Result;
-use std::{
-    io,
-    path::{Path, PathBuf},
-};
+use std::io;
+use std::path::{Path, PathBuf};
 
 use thiserror::Error as ThisError;
 
@@ -40,6 +38,24 @@ fn canonical_path(working_dir: &Path, from: &Path) -> PathBuf {
     } else {
         from.into()
     }
+}
+
+pub enum DriverTypes {
+    Blackhole,
+    Io,
+}
+
+pub trait Driver<NewSelf = Self> {
+    fn copy(self, from: &Path, to: &Path) -> Result<NewSelf, Error>;
+    fn link(self, from: &Path, to: &Path) -> Result<NewSelf, Error>;
+}
+
+#[derive(ThisError, Debug)]
+pub enum Error {
+    #[error("copy from `{0}` to `{1}` failed")]
+    Copy(PathBuf, PathBuf, #[source] io::Error),
+    #[error("link from `{0}` to `{1}` failed")]
+    Link(PathBuf, PathBuf, #[source] io::Error),
 }
 
 #[cfg(test)]
@@ -86,22 +102,4 @@ mod tests {
             .location
         )
     }
-}
-
-pub enum DriverTypes {
-    Blackhole,
-    Io,
-}
-
-pub trait Driver<NewSelf = Self> {
-    fn copy(self, from: &Path, to: &Path) -> Result<NewSelf, Error>;
-    fn link(self, from: &Path, to: &Path) -> Result<NewSelf, Error>;
-}
-
-#[derive(ThisError, Debug)]
-pub enum Error {
-    #[error("copy from `{0}` to `{1}` failed")]
-    Copy(PathBuf, PathBuf, #[source] io::Error),
-    #[error("link from `{0}` to `{1}` failed")]
-    Link(PathBuf, PathBuf, #[source] io::Error),
 }
