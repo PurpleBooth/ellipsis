@@ -16,8 +16,8 @@
    inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
    sodipodi:docname="logo.svg"
    inkscape:export-filename="/Users/billie/Documents/Code/ellipsis/logo/logo.png"
-   inkscape:export-xdpi="104.18251"
-   inkscape:export-ydpi="104.18251">
+   inkscape:export-xdpi="104.1825"
+   inkscape:export-ydpi="104.1825">
   <defs
      id="defs2">
     <linearGradient
@@ -53,7 +53,7 @@
      inkscape:cx="87.108041"
      inkscape:cy="77.563248"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer2"
      inkscape:document-rotation="0"
      showgrid="false"
      inkscape:window-width="1792"
@@ -115,11 +115,10 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Layer 2"
-     transform="translate(-65.636358,-126.90509)"
-     sodipodi:insensitive="true">
+     transform="translate(-65.636358,-126.90509)">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:21.1666px;line-height:1.25;font-family:sans-serif;mix-blend-mode:multiply;fill:#9e9e9e;fill-opacity:0.830645;stroke:#000000;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;font-size:21.16659999999999897px;line-height:1.25;font-family:sans-serif;mix-blend-mode:multiply;fill:#9b9fa6;fill-opacity:0.95999998;stroke:#000000;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;"
        x="68.625397"
        y="151.88425"
        id="text106"><tspan
@@ -127,9 +126,9 @@
          id="tspan104"
          x="68.625397"
          y="151.88425"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Baloo 2';-inkscape-font-specification:'Baloo 2, ';fill:#9e9e9e;fill-opacity:0.830645;stroke:#000000;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">ellipsis</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Baloo 2';-inkscape-font-specification:'Baloo 2, ';fill:#9b9fa6;fill-opacity:0.95999998;stroke:#000000;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;">ellipsis</tspan></text>
     <rect
-       style="fill:#99a1ae;fill-opacity:1;stroke:#000000;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#9b9fa6;fill-opacity:0.95999998;stroke:#000000;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect2897"
        width="61.654182"
        height="0.92772061"
