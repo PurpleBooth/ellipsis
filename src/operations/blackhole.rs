@@ -32,9 +32,8 @@ impl domain::Driver for Driver {
 
 #[cfg(test)]
 mod tests {
-    use crate::domain::Driver;
-
     use super::Driver as BlackholeDriver;
+    use crate::domain::Driver;
 
     #[test]
     fn copy_file() {

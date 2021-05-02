@@ -1,8 +1,10 @@
 use thiserror::Error as ThisError;
 
-use crate::config::Config;
-use crate::domain;
-use crate::domain::{Driver, Operation};
+use crate::{
+    config::Config,
+    domain,
+    domain::{Driver, Operation},
+};
 
 pub fn run<T>(input: Config, driver: T) -> Result<T, Error>
 where
@@ -28,11 +30,12 @@ pub enum Error {
 
 #[cfg(test)]
 mod tests {
-    use crate::config::Config;
-    use crate::domain;
-    use crate::domain::{DriverTypes, OperationPath};
-    use crate::operations::runner::run;
-    use crate::operations::BlackholeDriver;
+    use crate::{
+        config::Config,
+        domain,
+        domain::{DriverTypes, OperationPath},
+        operations::{runner::run, BlackholeDriver},
+    };
 
     #[test]
     fn copy_file() {

@@ -1,6 +1,8 @@
 use core::result::Result;
-use std::io;
-use std::path::{Path, PathBuf};
+use std::{
+    io,
+    path::{Path, PathBuf},
+};
 
 use thiserror::Error as ThisError;
 

@@ -1,6 +1,8 @@
-use std::fs;
-use std::os::unix::fs as unixfs;
-use std::path::{Path, PathBuf};
+use std::{
+    fs,
+    os::unix::fs as unixfs,
+    path::{Path, PathBuf},
+};
 
 use crate::domain;
 
@@ -29,13 +31,14 @@ impl domain::Driver for Driver {
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
-    use std::fs::File;
-    use std::io::{Read, Write};
-
-    use crate::domain::Driver;
+    use std::{
+        fs,
+        fs::File,
+        io::{Read, Write},
+    };
 
     use super::Driver as IoDriver;
+    use crate::domain::Driver;
 
     #[test]
     fn copy_file() {

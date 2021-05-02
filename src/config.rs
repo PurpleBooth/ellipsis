@@ -1,15 +1,10 @@
-use std::convert::TryFrom;
-use std::env;
-use std::fs::File;
-use std::io::Read;
-use std::path::Path;
+use std::{convert::TryFrom, env, fs::File, io::Read, path::Path};
 
 use clap::ArgMatches;
 use serde::{Deserialize, Serialize};
 use thiserror::Error as ThisError;
 
-use crate::domain;
-use crate::domain::DriverTypes;
+use crate::{domain, domain::DriverTypes};
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct ConfigOuter {
@@ -82,16 +77,13 @@ pub enum Error {
 
 #[cfg(test)]
 mod tests {
-    use std::convert::TryFrom;
-    use std::env;
-    use std::io::Write;
+    use std::{convert::TryFrom, env, io::Write};
 
     use indoc::indoc;
-
-    use crate::cli::app;
-    use crate::domain;
+    use tempfile::TempDir;
 
     use super::Config;
+    use crate::{cli::app, domain, domain::Operation};
 
     #[test]
     fn no_config_defined() {
