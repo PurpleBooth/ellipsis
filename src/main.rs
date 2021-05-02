@@ -13,11 +13,11 @@ fn main() -> AnyhowResult<()> {
     let config = config::Config::try_from(&matches)?;
 
     match config.driver {
-        operations::DriverTypes::Io => {
+        domain::DriverTypes::Io => {
             operations::run(config, operations::IoDriver::new())?;
         }
 
-        operations::DriverTypes::Blackhole => {
+        domain::DriverTypes::Blackhole => {
             let driver = operations::run(config, operations::BlackholeDriver::new())?;
 
             for (operation, message) in driver.log {

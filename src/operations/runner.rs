@@ -1,8 +1,8 @@
 use thiserror::Error as ThisError;
 
 use crate::config::Config;
-use crate::domain::Operation;
-use crate::operations::{driver, Driver};
+use crate::domain;
+use crate::domain::{Driver, Operation};
 
 pub fn run<T>(input: Config, driver: T) -> Result<T, Error>
 where
@@ -23,16 +23,16 @@ pub enum Error {
     #[error("io error")]
     Io(#[from] std::io::Error),
     #[error("driver error")]
-    Driver(#[from] driver::Error),
+    Driver(#[from] domain::Error),
 }
 
 #[cfg(test)]
 mod tests {
     use crate::config::Config;
     use crate::domain;
-    use crate::domain::OperationPath;
+    use crate::domain::{DriverTypes, OperationPath};
     use crate::operations::runner::run;
-    use crate::operations::{BlackholeDriver, DriverTypes};
+    use crate::operations::BlackholeDriver;
 
     #[test]
     fn copy_file() {

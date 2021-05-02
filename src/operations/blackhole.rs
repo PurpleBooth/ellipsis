@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use crate::operations::driver;
+use crate::domain;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Driver {
@@ -18,13 +18,13 @@ impl Driver {
     }
 }
 
-impl driver::Driver for Driver {
-    fn copy(mut self, from: &Path, to: &Path) -> Result<Driver, driver::Error> {
+impl domain::Driver for Driver {
+    fn copy(mut self, from: &Path, to: &Path) -> Result<Driver, domain::Error> {
         self.log("copy".into(), format!("{:?} -> {:?}", from, to));
         Ok(self)
     }
 
-    fn link(mut self, from: &Path, to: &Path) -> Result<Driver, driver::Error> {
+    fn link(mut self, from: &Path, to: &Path) -> Result<Driver, domain::Error> {
         self.log("link".into(), format!("{:?} -> {:?}", from, to));
         Ok(self)
     }
@@ -32,7 +32,7 @@ impl driver::Driver for Driver {
 
 #[cfg(test)]
 mod tests {
-    use crate::operations::driver::Driver;
+    use crate::domain::Driver;
 
     use super::Driver as BlackholeDriver;
 

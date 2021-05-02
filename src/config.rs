@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 use thiserror::Error as ThisError;
 
 use crate::domain;
-use crate::operations::DriverTypes;
+use crate::domain::DriverTypes;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct ConfigOuter {

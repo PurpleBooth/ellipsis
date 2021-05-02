@@ -2,7 +2,7 @@ use std::fs;
 use std::os::unix::fs as unixfs;
 use std::path::{Path, PathBuf};
 
-use crate::operations::driver;
+use crate::domain;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Driver {}
@@ -13,16 +13,16 @@ impl Driver {
     }
 }
 
-impl driver::Driver for Driver {
-    fn copy(self, from: &Path, to: &Path) -> Result<Driver, driver::Error> {
+impl domain::Driver for Driver {
+    fn copy(self, from: &Path, to: &Path) -> Result<Driver, domain::Error> {
         fs::copy(from, to)
-            .map_err(|error| driver::Error::Copy(PathBuf::from(from), PathBuf::from(to), error))
+            .map_err(|error| domain::Error::Copy(PathBuf::from(from), PathBuf::from(to), error))
             .map(|_| Driver::new())
     }
 
-    fn link(self, from: &Path, to: &Path) -> Result<Driver, driver::Error> {
+    fn link(self, from: &Path, to: &Path) -> Result<Driver, domain::Error> {
         unixfs::symlink(from, to)
-            .map_err(|error| driver::Error::Link(PathBuf::from(from), PathBuf::from(to), error))
+            .map_err(|error| domain::Error::Link(PathBuf::from(from), PathBuf::from(to), error))
             .map(|_| Driver::new())
     }
 }
@@ -33,8 +33,9 @@ mod tests {
     use std::fs::File;
     use std::io::{Read, Write};
 
+    use crate::domain::Driver;
+
     use super::Driver as IoDriver;
-    use crate::operations::driver::Driver;
 
     #[test]
     fn copy_file() {
