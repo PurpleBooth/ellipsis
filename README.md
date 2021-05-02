@@ -1,4 +1,6 @@
-# ellipsis
+<p align="center">
+    <img alt="ellipsis" src="./logo/logo.svg">
+</p>
 
 *ellipsis* is a dotfile manager.
 
