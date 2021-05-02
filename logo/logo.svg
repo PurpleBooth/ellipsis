@@ -53,7 +53,7 @@
      inkscape:cx="87.108041"
      inkscape:cy="77.563248"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer3"
      inkscape:document-rotation="0"
      showgrid="false"
      inkscape:window-width="1792"
@@ -82,11 +82,10 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Layer 3"
-     style="filter:url(#filter1462)"
-     sodipodi:insensitive="true">
+     style="filter:url(#filter1462)">
     <ellipse
        id="path11-8-3-7"
-       cx="56.468067"
+       cx="56.468071"
        cy="18.622873"
        rx="11.191432"
        ry="10.756579"
@@ -100,7 +99,7 @@
        style="fill:#ff8080;stroke:none;stroke-width:1.51454;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <ellipse
        id="path11-8-3"
-       cx="34.127087"
+       cx="34.12709"
        cy="18.622873"
        rx="11.191432"
        ry="10.756579"
@@ -116,7 +115,8 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Layer 2"
-     transform="translate(-65.636358,-126.90509)">
+     transform="translate(-65.636358,-126.90509)"
+     sodipodi:insensitive="true">
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:21.1666px;line-height:1.25;font-family:sans-serif;mix-blend-mode:multiply;fill:#9e9e9e;fill-opacity:0.830645;stroke:#000000;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
