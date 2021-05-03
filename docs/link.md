@@ -32,6 +32,8 @@ Then we run ellipsis
 ellipsis
 ```
 
+Now we can see that the link exists
+
 ``` shell,script(name="link-step-see-new-file",expected_exit_code=0)
 cat "$HOME/symlink.txt" 
 ```
@@ -39,6 +41,8 @@ cat "$HOME/symlink.txt"
 ``` text,verify(script_name="link-step-see-new-file",stream=stdout)
 Hello, world!
 ```
+
+And that it is actually a link, not a copy or something else
 
 ``` shell,script(name="link-step-see-link",expected_exit_code=0)
 if [[ -L "$HOME/symlink.txt" ]]; then
@@ -82,6 +86,8 @@ Then we can run ellipsis
 ellipsis
 ```
 
+Now we can see that the link exists
+
 ``` shell,script(name="link-step-check-file-after-overwrite",expected_exit_code=0)
 cat "$HOME/symlink.txt" 
 ```
@@ -89,6 +95,8 @@ cat "$HOME/symlink.txt"
 ``` text,verify(script_name="link-step-check-file-after-overwrite",stream=stdout)
 Hello, world!
 ```
+
+And that it is actually a link, not a copy or something else
 
 ``` shell,script(name="link-step-see-link-after-overwrite",expected_exit_code=0)
 if [[ -L "$HOME/symlink.txt" ]]; then
@@ -122,6 +130,8 @@ echo "Hello, world!" > source.txt
 ellipsis
 ```
 
+Now we can see that the link exists
+
 ``` shell,script(name="link-step-deep-link",expected_exit_code=0)
 cat "$HOME/some/deep/file/location/symlink.txt" 
 ```
@@ -129,6 +139,8 @@ cat "$HOME/some/deep/file/location/symlink.txt"
 ``` text,verify(script_name="link-step-deep-link",stream=stdout)
 Hello, world!
 ```
+
+And that it is actually a link, not a copy or something else
 
 ``` shell,script(name="link-step-deep-link-see-link",expected_exit_code=0)
 if [[ -L "$HOME/some/deep/file/location/symlink.txt" ]]; then

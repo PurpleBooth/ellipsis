@@ -32,6 +32,8 @@ Then we run ellipsis
 ellipsis
 ```
 
+Now we can see that the destination exists
+
 ``` shell,script(name="copy-step-see-new-file",expected_exit_code=0)
 cat "$HOME/destination.txt" 
 ```
@@ -62,7 +64,7 @@ Hello, world!
 ## Missing containing directories
 
 If the directory the file is to be placed within doesn't exist, we will
-create it
+create it.
 
 ``` yaml,file(path="ellipsis.yml")
 ---
@@ -79,6 +81,8 @@ echo "Hello, world!" > source.txt
 ``` shell,script(name="copy-step-deep-file-run",expected_exit_code=0)
 ellipsis
 ```
+
+Once ellipsis as ran, we can see the directory has been created
 
 ``` shell,script(name="copy-step-deep-link",expected_exit_code=0)
 cat "$HOME/some/deep/file/location/destination.txt" 
