@@ -16,6 +16,11 @@ impl Driver {
 
 impl domain::Driver for Driver {
     fn copy(self, from: &Path, to: &Path) -> Result<Driver, domain::Error> {
+        Driver::make_containing_directory(to).map_err(Driver::map_to_domain_error(
+            from.to_path_buf(),
+            to.to_path_buf(),
+        ))?;
+
         fs::copy(from, to)
             .map_err(|error| domain::Error::Copy(PathBuf::from(from), PathBuf::from(to), error))
             .map(|_| Driver::new())
@@ -29,12 +34,37 @@ impl domain::Driver for Driver {
             ))?;
         }
 
+        Driver::make_containing_directory(to).map_err(Driver::map_to_domain_error(
+            from.to_path_buf(),
+            to.to_path_buf(),
+        ))?;
+
         unixfs::symlink(from, to)
             .map_err(Driver::map_to_domain_error(
                 from.to_path_buf(),
                 to.to_path_buf(),
             ))
             .map(|_| Driver::new())
+    }
+}
+
+impl Driver {
+    fn map_to_domain_error(from: PathBuf, to: PathBuf) -> impl FnOnce(std::io::Error) -> Error {
+        |error| domain::Error::Link(from, to, error)
+    }
+}
+
+impl Driver {
+    fn delete_real_file_if_exists(path: &Path) -> Result<(), std::io::Error> {
+        if !path.exists() {
+            return Ok(());
+        }
+
+        if fs::metadata(path)?.file_type().is_file() {
+            fs::remove_file(path).map(|_| ())
+        } else {
+            Ok(())
+        }
     }
 }
 
@@ -61,6 +91,31 @@ mod tests {
     }
 
     #[test]
+    fn copy_file_into_deep_dir() {
+        let working_dir = tempfile::tempdir().unwrap().into_path();
+        write_file(&working_dir.join("in.txt"), "Hello, World!");
+
+        IoDriver::new()
+            .copy(
+                &working_dir.join("in.txt"),
+                &working_dir
+                    .join("a")
+                    .join("deep")
+                    .join("dir")
+                    .join("out.txt"),
+            )
+            .unwrap();
+        let output_file_contents = read_file(
+            &working_dir
+                .join("a")
+                .join("deep")
+                .join("dir")
+                .join("out.txt"),
+        );
+        assert_eq!(String::from("Hello, World!"), output_file_contents)
+    }
+
+    #[test]
     fn link_file() {
         let working_dir = tempfile::tempdir().unwrap().into_path();
         write_file(&working_dir.join("in.txt"), "Hello, World!");
@@ -79,6 +134,43 @@ mod tests {
             .unwrap()
             .file_type()
             .is_symlink())
+    }
+
+    #[test]
+    fn link_file_into_deep_dir() {
+        let working_dir = tempfile::tempdir().unwrap().into_path();
+        write_file(&working_dir.join("in.txt"), "Hello, World!");
+
+        IoDriver::new()
+            .link(
+                &working_dir.join("in.txt"),
+                &working_dir
+                    .join("a")
+                    .join("deep")
+                    .join("dir")
+                    .join("out.txt"),
+                false,
+            )
+            .unwrap();
+
+        let output_file_contents = read_file(
+            &working_dir
+                .join("a")
+                .join("deep")
+                .join("dir")
+                .join("out.txt"),
+        );
+        assert_eq!(String::from("Hello, World!"), output_file_contents);
+        assert!(fs::symlink_metadata(
+            working_dir
+                .join("a")
+                .join("deep")
+                .join("dir")
+                .join("out.txt")
+        )
+        .unwrap()
+        .file_type()
+        .is_symlink())
     }
 
     #[test]
@@ -135,21 +227,11 @@ mod tests {
 }
 
 impl Driver {
-    fn map_to_domain_error(from: PathBuf, to: PathBuf) -> impl FnOnce(std::io::Error) -> Error {
-        |error| domain::Error::Link(from, to, error)
-    }
-}
+    fn make_containing_directory(to: &Path) -> Result<(), std::io::Error> {
+        if let Some(path) = to.parent().filter(|x| !x.exists()) {
+            fs::create_dir_all(path)?
+        };
 
-impl Driver {
-    fn delete_real_file_if_exists(path: &Path) -> Result<(), std::io::Error> {
-        if !path.exists() {
-            return Ok(());
-        }
-
-        if fs::metadata(path)?.file_type().is_file() {
-            fs::remove_file(path).map(|_| ())
-        } else {
-            Ok(())
-        }
+        Ok(())
     }
 }

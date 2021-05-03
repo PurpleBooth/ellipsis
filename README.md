@@ -39,3 +39,18 @@ for linux and mac (all x86\_64), alternatively use brew
 ``` shell,skip()
 brew install PurpleBooth/repo/ellipsis
 ```
+
+## Docs
+
+### Execution modes
+
+These are things you can do to change how ellipsis will run
+
+-   [--dry-run](./docs/dry-run.md)
+
+### Operations
+
+These are types you can put in your "todo" list
+
+-   [copy](./docs/copy.md)
+-   [link](./docs/link.md)
