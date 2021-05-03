@@ -82,7 +82,7 @@ echo "Hello, world!" > source.txt
 ellipsis
 ```
 
-Once ellipsis as ran, we can see the directory has been created
+Once ellipsis has ran, we can see the directory has been created
 
 ``` shell,script(name="copy-step-deep-link",expected_exit_code=0)
 cat "$HOME/some/deep/file/location/destination.txt" 
