@@ -7,6 +7,8 @@ of your home directory.
 Link operations can be used to create soft links files between the
 location you desire.
 
+## Into Existing directories
+
 Here we link a file from one location to another. To do this we first
 need a file to link
 
@@ -41,12 +43,16 @@ Hello, world!
 ``` shell,script(name="link-step-see-link",expected_exit_code=0)
 if [[ -L "$HOME/symlink.txt" ]]; then
   echo "It's a link!"
+else
+  echo "It's not a link"
 fi
 ```
 
 ``` text,verify(script_name="link-step-see-link",stream=stdout)
 It's a link!
 ```
+
+## Overwriting real files with symlinks
 
 If the link is a file already
 
@@ -95,6 +101,8 @@ fi
 ``` text,verify(script_name="link-step-see-link-after-overwrite",stream=stdout)
 It's a link!
 ```
+
+## Missing containing directories
 
 If the directory the link is within doesn't exist, we will create it
 

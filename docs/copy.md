@@ -7,6 +7,8 @@ of your home directory.
 Copy operations can be used to copy files from your dotfiles to another
 location.
 
+## Into Existing directories
+
 Here we copy a file from one location to another. To do this we first
 need a file to copy
 
@@ -38,6 +40,8 @@ cat "$HOME/destination.txt"
 Hello, world!
 ```
 
+## Overwriting existing files
+
 If we subsequently make changes to this file, and rerun ellipsis
 
 ``` shell,script(name="copy-step-change-to-destination",expected_exit_code=0)
@@ -54,6 +58,8 @@ cat "$HOME/destination.txt"
 ``` text,verify(script_name="copy-step-see-new-file",stream=stdout)
 Hello, world!
 ```
+
+## Missing containing directories
 
 If the directory the file is to be placed within doesn't exist, we will
 create it
