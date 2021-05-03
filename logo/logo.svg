@@ -8,16 +8,16 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="71.254181mm"
-   height="37.245747mm"
-   viewBox="0 0 71.254181 37.245747"
+   width="79.140884mm"
+   height="41.336143mm"
+   viewBox="0 0 79.140885 41.336144"
    version="1.1"
    id="svg8"
    inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
    sodipodi:docname="logo.svg"
-   inkscape:export-filename="/Users/billie/Documents/Code/ellipsis/logo/logo.png"
-   inkscape:export-xdpi="104.1825"
-   inkscape:export-ydpi="104.1825">
+   inkscape:export-filename="/Users/billie/Documents/Code/ellipsis/logo/losgo.png"
+   inkscape:export-xdpi="483.0173"
+   inkscape:export-ydpi="483.0173">
   <defs
      id="defs2">
     <linearGradient
@@ -50,10 +50,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.1109919"
-     inkscape:cx="-82.683329"
-     inkscape:cy="-0.76222934"
+     inkscape:cx="-67.779314"
+     inkscape:cy="6.9676554"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer3"
      inkscape:document-rotation="0"
      showgrid="false"
      inkscape:window-width="1792"
@@ -74,7 +74,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -83,7 +83,7 @@
      id="layer3"
      inkscape:label="Layer 3"
      style="display:inline;filter:url(#filter1462)"
-     sodipodi:insensitive="true">
+     transform="translate(3.9433541,2.0451986)">
     <ellipse
        id="path11-8-3-7"
        cx="57.968071"
@@ -93,7 +93,7 @@
        style="fill:#80ffb3;stroke:none;stroke-width:1.51454;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <ellipse
        id="path11-8-3-0"
-       cx="13.286109"
+       cx="13.286107"
        cy="18.622873"
        rx="11.191432"
        ry="10.756579"
@@ -110,14 +110,15 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-65.636358,-126.90509)"
+     transform="translate(-61.693004,-124.85989)"
      style="display:inline"
      sodipodi:insensitive="true" />
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Layer 2"
-     transform="translate(-65.636358,-126.90509)">
+     transform="translate(-61.693004,-124.85989)"
+     sodipodi:insensitive="true">
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:21.1666px;line-height:1.25;font-family:sans-serif;mix-blend-mode:multiply;fill:#9b9fa6;fill-opacity:0.96;stroke:#000000;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
