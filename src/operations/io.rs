@@ -1,6 +1,7 @@
 use std::fs;
 use std::os::unix::fs as unixfs;
 use std::path::{Path, PathBuf};
+use std::process::Command;
 
 use crate::domain;
 use crate::domain::Error;
@@ -16,10 +17,8 @@ impl Driver {
 
 impl domain::Driver for Driver {
     fn copy(self, from: &Path, to: &Path) -> Result<Driver, domain::Error> {
-        Driver::make_containing_directory(to).map_err(Driver::map_to_domain_error(
-            from.to_path_buf(),
-            to.to_path_buf(),
-        ))?;
+        Driver::make_containing_directory(to)
+            .map_err(Driver::link_error(from.to_path_buf(), to.to_path_buf()))?;
 
         fs::copy(from, to)
             .map_err(|error| domain::Error::Copy(PathBuf::from(from), PathBuf::from(to), error))
@@ -28,28 +27,40 @@ impl domain::Driver for Driver {
 
     fn link(self, from: &Path, to: &Path, overwrite: bool) -> Result<Driver, domain::Error> {
         if overwrite {
-            Driver::delete_real_file_if_exists(to).map_err(Driver::map_to_domain_error(
-                from.to_path_buf(),
-                to.to_path_buf(),
-            ))?;
+            Driver::delete_real_file_if_exists(to)
+                .map_err(Driver::link_error(from.to_path_buf(), to.to_path_buf()))?;
         }
 
-        Driver::make_containing_directory(to).map_err(Driver::map_to_domain_error(
-            from.to_path_buf(),
-            to.to_path_buf(),
-        ))?;
+        Driver::make_containing_directory(to)
+            .map_err(Driver::link_error(from.to_path_buf(), to.to_path_buf()))?;
 
         unixfs::symlink(from, to)
-            .map_err(Driver::map_to_domain_error(
-                from.to_path_buf(),
-                to.to_path_buf(),
-            ))
+            .map_err(Driver::link_error(from.to_path_buf(), to.to_path_buf()))
+            .map(|_| Driver::new())
+    }
+
+    fn exec(self, working_dir: &Path, command: &str, args: &[String]) -> Result<Self, Error> {
+        Command::new(command)
+            .current_dir(working_dir)
+            .args(args)
+            .output()
+            .map_err(|error| {
+                domain::Error::Exec(
+                    command.into(),
+                    args.iter()
+                        .map(|arg| format!("\"{}\"", arg))
+                        .collect::<Vec<_>>()
+                        .join(", "),
+                    working_dir.into(),
+                    error,
+                )
+            })
             .map(|_| Driver::new())
     }
 }
 
 impl Driver {
-    fn map_to_domain_error(from: PathBuf, to: PathBuf) -> impl FnOnce(std::io::Error) -> Error {
+    fn link_error(from: PathBuf, to: PathBuf) -> impl FnOnce(std::io::Error) -> Error {
         |error| domain::Error::Link(from, to, error)
     }
 }
@@ -77,6 +88,20 @@ mod tests {
 
     use super::Driver as IoDriver;
     use crate::domain::Driver;
+
+    #[test]
+    fn exec_file() {
+        let working_dir = tempfile::tempdir().unwrap().into_path();
+        IoDriver::new()
+            .exec(
+                &working_dir,
+                "bash",
+                &["-c".into(), "echo Hello, World! > out.txt".into()],
+            )
+            .unwrap();
+        let output_file_contents = read_file(&working_dir.join("out.txt"));
+        assert_eq!(String::from("Hello, World!\n"), output_file_contents)
+    }
 
     #[test]
     fn copy_file() {

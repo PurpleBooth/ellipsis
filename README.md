@@ -54,3 +54,4 @@ These are types you can put in your "todo" list
 
 -   [copy](./docs/copy.md)
 -   [link](./docs/link.md)
+-   [exec](./docs/exec.md)

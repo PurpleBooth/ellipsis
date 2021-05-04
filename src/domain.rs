@@ -15,6 +15,11 @@ pub enum Operation {
         to: OperationPath,
         overwrite: bool,
     },
+    Exec {
+        working_dir: PathBuf,
+        command: String,
+        args: Vec<String>,
+    },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -22,22 +27,28 @@ pub struct OperationPath {
     pub location: PathBuf,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct OperationCommand {
+    pub run: String,
+    pub shell: String,
+}
+
 impl OperationPath {
     pub(crate) fn new(working_dir: &Path, home: &Path, location: &str) -> OperationPath {
         OperationPath {
             location: match location.strip_prefix("~/") {
-                Some(to) => canonical_path(&home, Path::new(to)),
-                None => canonical_path(&working_dir, &Path::new(&location)),
+                Some(to) => OperationPath::canonical_path(&home, Path::new(to)),
+                None => OperationPath::canonical_path(&working_dir, &Path::new(&location)),
             },
         }
     }
-}
 
-fn canonical_path(working_dir: &Path, from: &Path) -> PathBuf {
-    if from.is_relative() {
-        working_dir.join(&from)
-    } else {
-        from.into()
+    fn canonical_path(working_dir: &Path, from: &Path) -> PathBuf {
+        if from.is_relative() {
+            working_dir.join(&from)
+        } else {
+            from.into()
+        }
     }
 }
 
@@ -49,6 +60,7 @@ pub enum DriverTypes {
 pub trait Driver<NewSelf = Self> {
     fn copy(self, from: &Path, to: &Path) -> Result<NewSelf, Error>;
     fn link(self, from: &Path, to: &Path, overwrite: bool) -> Result<NewSelf, Error>;
+    fn exec(self, working_dir: &Path, command: &str, args: &[String]) -> Result<NewSelf, Error>;
 }
 
 #[derive(ThisError, Debug)]
@@ -57,6 +69,8 @@ pub enum Error {
     Copy(PathBuf, PathBuf, #[source] io::Error),
     #[error("link from `{0}` to `{1}` failed")]
     Link(PathBuf, PathBuf, #[source] io::Error),
+    #[error("exec `{0} {1}` in {2} failed")]
+    Exec(String, String, PathBuf, #[source] io::Error),
 }
 
 #[cfg(test)]

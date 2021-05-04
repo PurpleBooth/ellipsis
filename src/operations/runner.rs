@@ -18,6 +18,11 @@ where
                 to,
                 overwrite,
             } => driver.link(&from.location, &to.location, overwrite),
+            Operation::Exec {
+                working_dir,
+                command,
+                args,
+            } => driver.exec(&working_dir, &command, &args),
         })
         .map_err(Error::from)
 }
@@ -67,6 +72,29 @@ mod tests {
                     working_dir.join("in.txt"),
                     working_dir.join("out.txt")
                 )
+            )],
+            driver.log
+        );
+    }
+
+    #[test]
+    fn exec_file() {
+        let working_dir = tempfile::tempdir().unwrap().into_path();
+        let input = Config {
+            driver: DriverTypes::Blackhole,
+            operations: vec![domain::Operation::Exec {
+                working_dir: working_dir.clone(),
+                command: "bash".into(),
+                args: vec!["Hello".into()],
+            }],
+        };
+
+        let driver = run(input, BlackholeDriver::new()).unwrap();
+
+        assert_eq!(
+            vec![(
+                String::from("exec"),
+                format!("in {:?} \"bash\" [\"Hello\"]", working_dir,)
             )],
             driver.log
         );

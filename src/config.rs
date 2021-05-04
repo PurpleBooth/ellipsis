@@ -17,15 +17,11 @@ struct ConfigOuter {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-struct CopyOptions {
-    to: String,
-    from: String,
-}
-
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
 enum ConfigOperation {
     #[serde(rename = "copy")]
     Copy { to: String, from: String },
+    #[serde(rename = "exec")]
+    Exec { command: String, args: Vec<String> },
     #[serde(rename = "link")]
     Link {
         to: String,
@@ -76,6 +72,11 @@ impl TryFrom<&ArgMatches> for Config {
                         to: domain::OperationPath::new(&current_dir, Path::new(home), &to),
                         overwrite,
                     },
+                    ConfigOperation::Exec { command, args } => domain::Operation::Exec {
+                        working_dir: current_dir.clone(),
+                        command,
+                        args,
+                    },
                 })
                 .collect(),
         })
@@ -108,6 +109,26 @@ mod tests {
     fn no_config_defined() {
         let args = app().get_matches_from(vec!["ellipsis"]);
         assert!(Config::try_from(&args).is_err())
+    }
+
+    #[test]
+    fn exec_operation() {
+        let home = tempfile::tempdir().unwrap();
+        assert_yaml_parsing(
+            indoc! {r#"
+            ---
+            todo:
+            - exec:
+                command: echo
+                args: [hello]
+        "#},
+            &[domain::Operation::Exec {
+                working_dir: env::current_dir().unwrap(),
+                command: "echo".into(),
+                args: vec!["hello".into()],
+            }],
+            &home,
+        )
     }
 
     #[test]
@@ -165,6 +186,7 @@ mod tests {
             &home,
         )
     }
+
     #[test]
     fn link_and_overwrite() {
         let home = tempfile::tempdir().unwrap();

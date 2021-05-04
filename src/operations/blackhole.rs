@@ -32,12 +32,48 @@ impl domain::Driver for Driver {
         );
         Ok(self)
     }
+
+    fn exec(
+        mut self,
+        working_dir: &Path,
+        command: &str,
+        args: &[std::string::String],
+    ) -> Result<Self, Error> {
+        self.log(
+            "exec".into(),
+            format!("in {:?} {:?} {:?}", working_dir, command, args),
+        );
+        Ok(self)
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::Driver as BlackholeDriver;
     use crate::domain::Driver;
+
+    #[test]
+    fn exec_file() {
+        let working_dir = tempfile::tempdir().unwrap().into_path();
+        let driver = BlackholeDriver::new()
+            .exec(
+                &working_dir,
+                "bash",
+                &["-c".into(), "echo hello > out.txt".into()],
+            )
+            .unwrap();
+
+        assert_eq!(
+            vec![(
+                String::from("exec"),
+                format!(
+                    "in {:?} \"bash\" [\"-c\", \"echo hello > out.txt\"]",
+                    working_dir.display()
+                )
+            )],
+            driver.log
+        )
+    }
 
     #[test]
     fn copy_file() {
