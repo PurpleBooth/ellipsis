@@ -14,6 +14,11 @@ todo:
 - link:
     from: source.txt
     to: ~/link.txt
+- exec:
+    command: bash
+    args:
+        - "-c"
+        - 'echo "Hello, world!" > output.txt'
 ```
 
 Then we run ellipsis
@@ -25,6 +30,7 @@ HOME="/home/your-home" ellipsis --dry-run | sed "s#: .*/demo#: \"/demo#g"
 ``` text,verify(script_name="copy-step-elipsis",stream=stdout)
 copy: "/demo/source.txt" -> "/home/your-home/destination.txt"
 link: "/demo/source.txt" -> (overwriting: false) "/home/your-home/link.txt"
+exec: "/demo" "bash" ["-c", "echo \"Hello, world!\" > output.txt"]
 ```
 
 And no actual changes will be made
