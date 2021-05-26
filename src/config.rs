@@ -2,7 +2,6 @@ use std::convert::TryFrom;
 use std::env;
 use std::fs::File;
 use std::io::Read;
-use std::path::Path;
 
 use clap::ArgMatches;
 use serde::{Deserialize, Serialize};
@@ -59,24 +58,17 @@ impl TryFrom<&ArgMatches> for Config {
                 .todo
                 .into_iter()
                 .map(|operation| match operation {
-                    ConfigOperation::Copy { to, from } => domain::Operation::Copy {
-                        from: domain::OperationPath::new(&current_dir, Path::new(home), &from),
-                        to: domain::OperationPath::new(&current_dir, Path::new(home), &to),
-                    },
+                    ConfigOperation::Copy { to, from } => {
+                        domain::Operation::new_copy(home, &current_dir, &to, &from)
+                    }
                     ConfigOperation::Link {
                         to,
                         from,
                         overwrite,
-                    } => domain::Operation::Link {
-                        from: domain::OperationPath::new(&current_dir, Path::new(home), &from),
-                        to: domain::OperationPath::new(&current_dir, Path::new(home), &to),
-                        overwrite,
-                    },
-                    ConfigOperation::Exec { command, args } => domain::Operation::Exec {
-                        working_dir: current_dir.clone(),
-                        command,
-                        args,
-                    },
+                    } => domain::Operation::new_link(home, &current_dir, &to, &from, overwrite),
+                    ConfigOperation::Exec { command, args } => {
+                        domain::Operation::new_exec(&current_dir, command, args)
+                    }
                 })
                 .collect(),
         })

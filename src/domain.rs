@@ -22,6 +22,37 @@ pub enum Operation {
     },
 }
 
+impl Operation {
+    pub(crate) fn new_copy(home: &str, current_dir: &Path, to: &str, from: &str) -> Operation {
+        Operation::Copy {
+            from: OperationPath::new(&current_dir, Path::new(home), &from),
+            to: OperationPath::new(&current_dir, Path::new(home), &to),
+        }
+    }
+
+    pub(crate) fn new_link(
+        home: &str,
+        current_dir: &Path,
+        to: &str,
+        from: &str,
+        overwrite: bool,
+    ) -> Operation {
+        Operation::Link {
+            from: OperationPath::new(&current_dir, Path::new(home), &from),
+            to: OperationPath::new(&current_dir, Path::new(home), &to),
+            overwrite,
+        }
+    }
+
+    pub(crate) fn new_exec(current_dir: &Path, command: String, args: Vec<String>) -> Operation {
+        Operation::Exec {
+            working_dir: current_dir.to_path_buf(),
+            command,
+            args,
+        }
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OperationPath {
     pub location: PathBuf,
