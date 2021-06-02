@@ -4,7 +4,7 @@ set -euo pipefail
 
 function safe_specdown() {
 	if [ -f "$1" ]; then
-	  HOME="${2:-$(mktemp -d)}"
+		HOME="${2:-$(mktemp -d)}"
 		MARKDOWN_PATH="$(
 			cd "$(dirname "$1")"
 			pwd -P
@@ -27,9 +27,9 @@ function safe_specdown() {
 }
 
 for ARG in "${@:1}"; do
-  if [[ "$(basename "$ARG")" == "README.md" ]] ; then
-    safe_specdown "$ARG" /home/your-home
-  else
-	  safe_specdown "$ARG"
-  fi
+	if [[ "$(basename "$ARG")" == "README.md" ]]; then
+		safe_specdown "$ARG" /home/your-home
+	else
+		safe_specdown "$ARG"
+	fi
 done
