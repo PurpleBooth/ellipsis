@@ -25,8 +25,8 @@ pub enum Operation {
 impl Operation {
     pub(crate) fn new_copy(home: &str, current_dir: &Path, to: &str, from: &str) -> Operation {
         Operation::Copy {
-            from: OperationPath::new(&current_dir, Path::new(home), &from),
-            to: OperationPath::new(&current_dir, Path::new(home), &to),
+            from: OperationPath::new(current_dir, Path::new(home), from),
+            to: OperationPath::new(current_dir, Path::new(home), to),
         }
     }
 
@@ -38,8 +38,8 @@ impl Operation {
         overwrite: bool,
     ) -> Operation {
         Operation::Link {
-            from: OperationPath::new(&current_dir, Path::new(home), &from),
-            to: OperationPath::new(&current_dir, Path::new(home), &to),
+            from: OperationPath::new(current_dir, Path::new(home), from),
+            to: OperationPath::new(current_dir, Path::new(home), to),
             overwrite,
         }
     }
@@ -68,8 +68,8 @@ impl OperationPath {
     pub(crate) fn new(working_dir: &Path, home: &Path, location: &str) -> OperationPath {
         OperationPath {
             location: match location.strip_prefix("~/") {
-                Some(to) => OperationPath::canonical_path(&home, Path::new(to)),
-                None => OperationPath::canonical_path(&working_dir, &Path::new(&location)),
+                Some(to) => OperationPath::canonical_path(home, Path::new(to)),
+                None => OperationPath::canonical_path(working_dir, Path::new(&location)),
             },
         }
     }
@@ -120,7 +120,7 @@ mod tests {
                 "example.txt",
             )
             .location
-        )
+        );
     }
 
     #[test]
@@ -133,7 +133,7 @@ mod tests {
                 "/tmp/example.txt",
             )
             .location
-        )
+        );
     }
 
     #[test]
@@ -146,6 +146,6 @@ mod tests {
                 "/tmp/example.txt",
             )
             .location
-        )
+        );
     }
 }

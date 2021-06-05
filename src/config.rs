@@ -100,7 +100,7 @@ mod tests {
     #[test]
     fn no_config_defined() {
         let args = app().get_matches_from(vec!["ellipsis"]);
-        assert!(Config::try_from(&args).is_err())
+        assert!(Config::try_from(&args).is_err());
     }
 
     #[test]
@@ -120,7 +120,7 @@ mod tests {
                 args: vec!["hello".into()],
             }],
             &home,
-        )
+        );
     }
 
     #[test]
@@ -147,7 +147,7 @@ mod tests {
                 ),
             }],
             &home,
-        )
+        );
     }
 
     #[test]
@@ -176,7 +176,7 @@ mod tests {
                 overwrite: false,
             }],
             &home,
-        )
+        );
     }
 
     #[test]
@@ -206,7 +206,7 @@ mod tests {
                 overwrite: true,
             }],
             &home,
-        )
+        );
     }
 
     fn assert_yaml_parsing(yaml: &str, expected: &[Operation], home: &TempDir) {
@@ -220,6 +220,6 @@ mod tests {
             "--config",
             &tmpfile.path().display().to_string(),
         ]);
-        assert_eq!(Config::try_from(&args).unwrap().operations, expected)
+        assert_eq!(Config::try_from(&args).unwrap().operations, expected);
     }
 }

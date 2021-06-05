@@ -100,7 +100,7 @@ mod tests {
             )
             .unwrap();
         let output_file_contents = read_file(&working_dir.join("out.txt"));
-        assert_eq!(String::from("Hello, World!\n"), output_file_contents)
+        assert_eq!(String::from("Hello, World!\n"), output_file_contents);
     }
 
     #[test]
@@ -112,7 +112,7 @@ mod tests {
             .copy(&working_dir.join("in.txt"), &working_dir.join("out.txt"))
             .unwrap();
         let output_file_contents = read_file(&working_dir.join("out.txt"));
-        assert_eq!(String::from("Hello, World!"), output_file_contents)
+        assert_eq!(String::from("Hello, World!"), output_file_contents);
     }
 
     #[test]
@@ -137,7 +137,7 @@ mod tests {
                 .join("dir")
                 .join("out.txt"),
         );
-        assert_eq!(String::from("Hello, World!"), output_file_contents)
+        assert_eq!(String::from("Hello, World!"), output_file_contents);
     }
 
     #[test]
@@ -158,7 +158,7 @@ mod tests {
         assert!(fs::symlink_metadata(working_dir.join("out.txt"))
             .unwrap()
             .file_type()
-            .is_symlink())
+            .is_symlink());
     }
 
     #[test]
@@ -195,7 +195,7 @@ mod tests {
         )
         .unwrap()
         .file_type()
-        .is_symlink())
+        .is_symlink());
     }
 
     #[test]
@@ -218,7 +218,7 @@ mod tests {
         assert!(fs::symlink_metadata(working_dir.join("out.txt"))
             .unwrap()
             .file_type()
-            .is_symlink())
+            .is_symlink());
     }
 
     #[test]
@@ -254,7 +254,7 @@ mod tests {
 impl Driver {
     fn make_containing_directory(to: &Path) -> Result<(), std::io::Error> {
         if let Some(path) = to.parent().filter(|x| !x.exists()) {
-            fs::create_dir_all(path)?
+            fs::create_dir_all(path)?;
         };
 
         Ok(())

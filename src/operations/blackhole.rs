@@ -15,7 +15,7 @@ impl Driver {
     }
 
     pub fn log(&mut self, kind: String, message: String) {
-        self.log.push((kind, message))
+        self.log.push((kind, message));
     }
 }
 
@@ -72,7 +72,7 @@ mod tests {
                 )
             )],
             driver.log
-        )
+        );
     }
 
     #[test]
@@ -92,7 +92,7 @@ mod tests {
                 )
             )],
             driver.log
-        )
+        );
     }
 
     #[test]
@@ -116,6 +116,6 @@ mod tests {
                 )
             )],
             driver.log
-        )
+        );
     }
 }

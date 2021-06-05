@@ -21,7 +21,7 @@ fn main() -> AnyhowResult<()> {
             let driver = operations::run(config, operations::BlackholeDriver::new())?;
 
             for (operation, message) in driver.log {
-                println!("{}: {}", operation, message)
+                println!("{}: {}", operation, message);
             }
         }
     }
