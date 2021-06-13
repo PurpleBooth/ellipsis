@@ -9,6 +9,7 @@ queue_rules:
   - status-success=specdown (ubuntu-latest, https://github.com/specdown/specdown/releases/download/v0.41.0/specdown-...
   - status-success=specdown (macos-latest, https://github.com/specdown/specdown/releases/download/v0.41.0/specdown-x...
   - status-success=lints
+  - status-success=lint-markdown
 
 pull_request_rules:
 - name: request review on external contributor
@@ -29,6 +30,7 @@ pull_request_rules:
   - status-success=specdown (ubuntu-latest, https://github.com/specdown/specdown/releases/download/v0.41.0/specdown-...
   - status-success=specdown (macos-latest, https://github.com/specdown/specdown/releases/download/v0.41.0/specdown-x...
   - status-success=lints
+  - status-success=lint-markdown
   - base=main
   - author~=^dependabot(|-preview)\[bot\]$
   actions:

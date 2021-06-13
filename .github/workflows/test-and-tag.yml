@@ -172,6 +172,7 @@ jobs:
     - lints
     - check
     - security-audit
+    - lint-markdown
     outputs:
       version_bump: ${{ steps.version_bump.outputs.version_bump }}
       current_version: ${{ steps.current_version.outputs.current_version }}
