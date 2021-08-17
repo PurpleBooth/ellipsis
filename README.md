@@ -12,7 +12,9 @@ ellipsis --help
 
 ``` text,verify(script_name="help",stream=stdout)
 ellipsis 0.6.7
+
 Billie Thompson <billie@billiecodes.com>
+
 Manage dotfiles
 
 USAGE:
@@ -20,8 +22,8 @@ USAGE:
 
 FLAGS:
         --dry-run    Print what would be done without making any changes
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+    -h, --help       Print help information
+    -V, --version    Print version information
 
 OPTIONS:
     -c, --config <config>    The configuration file for the operations to perform [env: ELLIPSIS=]
