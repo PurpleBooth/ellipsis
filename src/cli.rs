@@ -9,6 +9,7 @@ pub fn app() -> App<'static> {
         .arg(
             Arg::new("home")
                 .long("home")
+                .takes_value(true)
                 .about("Work on the basis that the home directory is at this path")
                 .env("HOME"),
         )
@@ -16,6 +17,7 @@ pub fn app() -> App<'static> {
             Arg::new("config")
                 .short('c')
                 .long("config")
+                .takes_value(true)
                 .default_value("ellipsis.yml")
                 .about("The configuration file for the operations to perform")
                 .env("ELLIPSIS"),
