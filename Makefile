@@ -16,7 +16,7 @@ test:
 .PHONY: specdown
 ## Test the markdown in the docs directory
 specdown: build
-	./test-harness/specdown ./README.md
+	./runners/specdown-runner ./README.md docs/*.md
 
 .PHONY: smoke-test
 ## Run a smoke test and see if the app runs
