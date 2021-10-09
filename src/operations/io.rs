@@ -10,33 +10,33 @@ use crate::domain::Error;
 pub struct Driver {}
 
 impl Driver {
-    pub fn new() -> Driver {
-        Driver {}
+    pub const fn new() -> Self {
+        Self {}
     }
 }
 
 impl domain::Driver for Driver {
-    fn copy(self, from: &Path, to: &Path) -> Result<Driver, domain::Error> {
-        Driver::make_containing_directory(to)
-            .map_err(Driver::link_error(from.to_path_buf(), to.to_path_buf()))?;
+    fn copy(self, from: &Path, to: &Path) -> Result<Self, domain::Error> {
+        Self::make_containing_directory(to)
+            .map_err(Self::link_error(from.to_path_buf(), to.to_path_buf()))?;
 
         fs::copy(from, to)
             .map_err(|error| domain::Error::Copy(PathBuf::from(from), PathBuf::from(to), error))
-            .map(|_| Driver::new())
+            .map(|_| Self::new())
     }
 
-    fn link(self, from: &Path, to: &Path, overwrite: bool) -> Result<Driver, domain::Error> {
+    fn link(self, from: &Path, to: &Path, overwrite: bool) -> Result<Self, domain::Error> {
         if overwrite {
-            Driver::delete_real_file_if_exists(to)
-                .map_err(Driver::link_error(from.to_path_buf(), to.to_path_buf()))?;
+            Self::delete_real_file_if_exists(to)
+                .map_err(Self::link_error(from.to_path_buf(), to.to_path_buf()))?;
         }
 
-        Driver::make_containing_directory(to)
-            .map_err(Driver::link_error(from.to_path_buf(), to.to_path_buf()))?;
+        Self::make_containing_directory(to)
+            .map_err(Self::link_error(from.to_path_buf(), to.to_path_buf()))?;
 
         unixfs::symlink(from, to)
-            .map_err(Driver::link_error(from.to_path_buf(), to.to_path_buf()))
-            .map(|_| Driver::new())
+            .map_err(Self::link_error(from.to_path_buf(), to.to_path_buf()))
+            .map(|_| Self::new())
     }
 
     fn exec(self, working_dir: &Path, command: &str, args: &[String]) -> Result<Self, Error> {
@@ -55,7 +55,7 @@ impl domain::Driver for Driver {
                     error,
                 )
             })
-            .map(|_| Driver::new())
+            .map(|_| Self::new())
     }
 }
 

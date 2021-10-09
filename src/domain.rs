@@ -23,8 +23,8 @@ pub enum Operation {
 }
 
 impl Operation {
-    pub(crate) fn new_copy(home: &str, current_dir: &Path, to: &str, from: &str) -> Operation {
-        Operation::Copy {
+    pub(crate) fn new_copy(home: &str, current_dir: &Path, to: &str, from: &str) -> Self {
+        Self::Copy {
             from: OperationPath::new(current_dir, Path::new(home), from),
             to: OperationPath::new(current_dir, Path::new(home), to),
         }
@@ -36,16 +36,16 @@ impl Operation {
         to: &str,
         from: &str,
         overwrite: bool,
-    ) -> Operation {
-        Operation::Link {
+    ) -> Self {
+        Self::Link {
             from: OperationPath::new(current_dir, Path::new(home), from),
             to: OperationPath::new(current_dir, Path::new(home), to),
             overwrite,
         }
     }
 
-    pub(crate) fn new_exec(current_dir: &Path, command: String, args: Vec<String>) -> Operation {
-        Operation::Exec {
+    pub(crate) fn new_exec(current_dir: &Path, command: String, args: Vec<String>) -> Self {
+        Self::Exec {
             working_dir: current_dir.to_path_buf(),
             command,
             args,
@@ -65,11 +65,11 @@ pub struct OperationCommand {
 }
 
 impl OperationPath {
-    pub(crate) fn new(working_dir: &Path, home: &Path, location: &str) -> OperationPath {
-        OperationPath {
+    pub(crate) fn new(working_dir: &Path, home: &Path, location: &str) -> Self {
+        Self {
             location: match location.strip_prefix("~/") {
-                Some(to) => OperationPath::canonical_path(home, Path::new(to)),
-                None => OperationPath::canonical_path(working_dir, Path::new(&location)),
+                Some(to) => Self::canonical_path(home, Path::new(to)),
+                None => Self::canonical_path(working_dir, Path::new(&location)),
             },
         }
     }

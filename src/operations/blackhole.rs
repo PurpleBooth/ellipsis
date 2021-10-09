@@ -10,8 +10,8 @@ pub struct Driver {
 
 impl Driver {
     #[allow(dead_code)]
-    pub fn new() -> Driver {
-        Driver { log: Vec::new() }
+    pub const fn new() -> Self {
+        Self { log: Vec::new() }
     }
 
     pub fn log(&mut self, kind: String, message: String) {
@@ -20,12 +20,12 @@ impl Driver {
 }
 
 impl domain::Driver for Driver {
-    fn copy(mut self, from: &Path, to: &Path) -> Result<Driver, domain::Error> {
+    fn copy(mut self, from: &Path, to: &Path) -> Result<Self, domain::Error> {
         self.log("copy".into(), format!("{:?} -> {:?}", from, to));
         Ok(self)
     }
 
-    fn link(mut self, from: &Path, to: &Path, overwrite: bool) -> Result<Driver, Error> {
+    fn link(mut self, from: &Path, to: &Path, overwrite: bool) -> Result<Self, Error> {
         self.log(
             "link".into(),
             format!("{:?} -> (overwriting: {}) {:?}", from, overwrite, to),

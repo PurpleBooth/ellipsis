@@ -48,7 +48,7 @@ impl TryFrom<&ArgMatches> for Config {
         let deserialized_point: ConfigOuter = serde_yaml::from_str(&config)?;
         let current_dir = env::current_dir()?;
 
-        Ok(Config {
+        Ok(Self {
             driver: if dry_run {
                 DriverTypes::Blackhole
             } else {
