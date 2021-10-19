@@ -18,18 +18,16 @@ Billie Thompson <billie@billiecodes.com>
 Manage dotfiles
 
 USAGE:
-    ellipsis [FLAGS] [OPTIONS]
-
-FLAGS:
-        --dry-run    Print what would be done without making any changes
-    -h, --help       Print help information
-    -V, --version    Print version information
+    ellipsis [OPTIONS]
 
 OPTIONS:
     -c, --config <config>    The configuration file for the operations to perform [env: ELLIPSIS=]
                              [default: ellipsis.yml]
+        --dry-run            Print what would be done without making any changes
+    -h, --help               Print help information
         --home <home>        Work on the basis that the home directory is at this path [env:
                              HOME=/home/your-home]
+    -V, --version            Print version information
 ```
 
 ## Installing

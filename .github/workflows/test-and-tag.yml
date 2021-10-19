@@ -2,7 +2,7 @@ name: Test
 on:
   push:
     branches:
-      - '*'
+    - '*'
   pull_request:
   workflow_dispatch:
 jobs:
@@ -23,10 +23,10 @@ jobs:
   release:
     if: github.ref == 'refs/heads/main'
     needs:
-      - commit-checks
-      - specdown
-      - lint-markdown
-      - rust-checks
+    - commit-checks
+    - specdown
+    - lint-markdown
+    - rust-checks
     outputs:
       version_bump: ${{ steps.release.outputs.version_bump }}
       current_version: ${{ steps.release.outputs.current_version }}
@@ -39,7 +39,7 @@ jobs:
   release-binary:
     if: needs.release.outputs.version_bump
     needs:
-      - release
+    - release
     uses: PurpleBooth/common-pipelines/.github/workflows/release-rust-binary.yml@v0.2.0
     with:
       current_version: ${{ needs.release.outputs.current_version }}
