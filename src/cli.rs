@@ -10,7 +10,7 @@ pub fn app() -> App<'static> {
             Arg::new("home")
                 .long("home")
                 .takes_value(true)
-                .about("Work on the basis that the home directory is at this path")
+                .help("Work on the basis that the home directory is at this path")
                 .env("HOME"),
         )
         .arg(
@@ -19,13 +19,13 @@ pub fn app() -> App<'static> {
                 .long("config")
                 .takes_value(true)
                 .default_value("ellipsis.yml")
-                .about("The configuration file for the operations to perform")
+                .help("The configuration file for the operations to perform")
                 .env("ELLIPSIS"),
         )
         .arg(
             Arg::new("dry-run")
                 .long("dry-run")
                 .takes_value(false)
-                .about("Print what would be done without making any changes"),
+                .help("Print what would be done without making any changes"),
         )
 }
