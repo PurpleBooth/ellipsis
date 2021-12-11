@@ -11,7 +11,7 @@ ellipsis --help
 ```
 
 ``` text,verify(script_name="help",stream=stdout)
-ellipsis 0.6.22
+ellipsis 0.6.23
 
 Billie Thompson <billie@billiecodes.com>
 
