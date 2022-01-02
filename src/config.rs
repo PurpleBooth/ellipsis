@@ -137,12 +137,12 @@ mod tests {
             &[domain::Operation::Copy {
                 from: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
-                    &home.path().to_path_buf(),
+                    home.path(),
                     "source.txt",
                 ),
                 to: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
-                    &home.path().to_path_buf(),
+                    home.path(),
                     "~/destination.txt",
                 ),
             }],
@@ -165,12 +165,12 @@ mod tests {
             &[domain::Operation::Link {
                 from: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
-                    &home.path().to_path_buf(),
+                    home.path(),
                     "source.txt",
                 ),
                 to: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
-                    &home.path().to_path_buf(),
+                    home.path(),
                     "~/destination.txt",
                 ),
                 overwrite: false,
@@ -195,12 +195,12 @@ mod tests {
             &[domain::Operation::Link {
                 from: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
-                    &home.path().to_path_buf(),
+                    home.path(),
                     "source.txt",
                 ),
                 to: domain::OperationPath::new(
                     &env::current_dir().unwrap(),
-                    &home.path().to_path_buf(),
+                    home.path(),
                     "~/destination.txt",
                 ),
                 overwrite: true,

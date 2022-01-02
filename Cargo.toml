@@ -13,10 +13,10 @@ description = "Manage dotfiles"
 
 [dependencies]
 thiserror = "1.0.30"
-clap = { version = "3.0.0-rc.8", features = ["derive", "cargo", "wrap_help", "yaml", "env", "unicode", "debug" ] }
-serde = { version = "1.0.132", features = ["derive"] }
+clap = { version = "3.0.0", features = ["derive", "cargo", "wrap_help", "yaml", "env", "unicode" ] }
+serde = { version = "1.0.133", features = ["derive"] }
 serde_yaml = "0.8.23"
 indoc = "1.0.3"
 tempfile = "3.2.0"
 regex = "1.5.4"
-anyhow = "1.0.51"
+anyhow = "1.0.52"
