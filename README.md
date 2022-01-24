@@ -11,7 +11,7 @@ ellipsis --help
 ```
 
 ``` text,verify(script_name="help",stream=stdout)
-ellipsis 0.6.29
+ellipsis 0.6.30
 Billie Thompson <billie@billiecodes.com>
 Manage dotfiles
 
