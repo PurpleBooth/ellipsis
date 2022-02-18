@@ -93,13 +93,13 @@ mod tests {
     use tempfile::TempDir;
 
     use super::Config;
-    use crate::cli::app;
+    use crate::cli::cli;
     use crate::domain;
     use crate::domain::Operation;
 
     #[test]
     fn no_config_defined() {
-        let args = app().get_matches_from(vec!["ellipsis"]);
+        let args = cli().get_matches_from(vec!["ellipsis"]);
         assert!(Config::try_from(&args).is_err());
     }
 
@@ -213,7 +213,7 @@ mod tests {
         let mut tmpfile = tempfile::NamedTempFile::new().unwrap();
         write!(tmpfile, "{}", yaml).unwrap();
 
-        let args = app().get_matches_from(vec![
+        let args = cli().get_matches_from(vec![
             "ellipsis",
             "--home",
             &home.path().display().to_string(),

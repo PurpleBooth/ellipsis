@@ -9,7 +9,7 @@ mod operations;
 use anyhow::Result as AnyhowResult;
 
 fn main() -> AnyhowResult<()> {
-    let matches = cli::app().get_matches();
+    let matches = cli::cli().get_matches();
     let config = config::Config::try_from(&matches)?;
 
     match config.driver {
