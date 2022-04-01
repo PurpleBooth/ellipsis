@@ -81,7 +81,7 @@ dependencies = [
 
 [[package]]
 name = "ellipsis"
-version = "0.6.38"
+version = "0.6.39"
 dependencies = [
  "anyhow",
  "clap",
